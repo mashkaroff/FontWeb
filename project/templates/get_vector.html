@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Get Vector</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='get_vector.css')}}">
+</head>
+<body>
+    <div class="container">
+        <!-- <h1 class="text-center mb-4">Выбор</h1> -->
+        <form action="/upload" method="POST" enctype="multipart/form-data">
+        <div class="add_image">
+            <input type="file" class="image" name="photo" id="fileInput" required>
+        </div>
+        <!-- <button type="submit" class="btn" name="action" value="vector">Получить вектор</button> -->
+        <button type="submit" class="btn" name="action" value="search">Найти шрифт</button>
+        </form>
+
+        <div class="vector">
+            <p><strong>Файл: </strong>{{ filename }}</p>
+            <!-- <p><strong>Вектор:</strong>{{ vector }}</p> -->
+            <p><strong>Топ-10 похожих шрифтов:</strong></p>
+                <ul>
+                    {% for font in fonts %}
+                    <li>
+                        {{ font.name }} — cos: {{ "%.4f"|format(font.sim) }}
+                    </li>
+                    {% endfor %}
+                </ul>
+        </div>
+    </div>
+   
+</body>
+</html>
