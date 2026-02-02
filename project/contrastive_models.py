@@ -5,6 +5,7 @@ import numpy as np
 import torchvision.transforms as transforms
 import torchvision.models as models
 import io
+import os
 
 class SimCLRModel(nn.Module):
     def __init__(self, projection_dim=128):
@@ -54,22 +55,36 @@ def load_classifier(model_path='project\classifier_model.pt'):
     classifier.eval()
     return classifier
 
-def crop_image(image, crop_size=40, step=40, max_crops=20):
+def crop_image(image, crop_size=40, step=40, max_crops=300):
     width, height = image.size
     crops = []
+
+    os.makedirs("debug", exist_ok=True)
+
+    for filename in os.listdir("debug"):
+       file_path = os.path.join("debug", filename)
+       os.remove(file_path)
 
     transform = transforms.Compose([
         transforms.Resize((40, 40)),
         transforms.ToTensor()
     ])
 
-    for x in range(0, width - crop_size + 1, step):
-        crop = image.crop((x, 0, x + crop_size, crop_size))
-        crops.append(transform(crop))
-        if len(crops) >= max_crops:
-            break
+    idx = 0
+    for y in range(0, height - crop_size + 1, step):
+        for x in range(0, width - crop_size + 1, step):
+            crop = image.crop((x, y, x + crop_size, y + crop_size))
+
+            crop.save(f"debug/crop_{idx}.png")
+
+            crops.append(transform(crop))
+            idx += 1
+
+            if len(crops) >= max_crops:
+                return crops
 
     return crops
+
 
 
 def get_image_vector(encoder, classifier, crop):
@@ -79,8 +94,10 @@ def get_image_vector(encoder, classifier, crop):
     with torch.no_grad():
         feats = encoder(input)
         logits = classifier(feats)
+        vector = torch.sigmoid(logits.squeeze(0))
+    # print(vector)
 
-    return logits.numpy()
+    return vector.numpy()
 
 def get_mean_vector(encoder, classifier, image_bytes):
     image = Image.open(io.BytesIO(image_bytes)).convert("L")
@@ -93,7 +110,7 @@ def get_mean_vector(encoder, classifier, image_bytes):
         vectors.append(vec)
 
     mean_vector = np.mean(vectors, axis=0)
-    mean_vector = 1 / (1 + np.exp(-mean_vector))
+    print(f"Средний вектор {mean_vector}")
 
     return mean_vector
 

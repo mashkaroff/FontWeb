@@ -13,16 +13,17 @@ def cosine_similarity(a, b):
 
 def find_font(pred, top=10):
 
-    sims = [ cosine_similarity(pred, font_vec) for font_vec in FONT_VECTORS ]
+    sims = [cosine_similarity(pred, font_vec) for font_vec in FONT_VECTORS ]
     sims = np.array(sims)
-    fonts = np.argsort(sims)[::-1][:top]
+    inds = np.argsort(sims)[::-1]
 
     results = [
         {
             "name": FONT_NAMES[i],
             "sim": float(sims[i])
         }
-        for i in fonts
+        for i in inds 
     ]
-
-    return results
+    # print("Косинусное")
+    # print(results)
+    return results[:10]

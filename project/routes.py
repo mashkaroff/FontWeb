@@ -9,7 +9,7 @@ classifier = load_classifier()
 
 @app.route('/')
 def get_vector():
-  return render_template('get_vector.html', fonts=[], filename=None)
+  return render_template('get_vector.html', fonts=[], filename="")
 
 @app.route('/upload', methods=['POST'])
 def upload_file():
