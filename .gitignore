@@ -48,7 +48,6 @@ Thumbs.db
 *.log
 
 
-*.pth
 *.pkl
 *.h5
 *.hdf5
