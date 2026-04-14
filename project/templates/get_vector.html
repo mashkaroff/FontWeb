@@ -3,34 +3,72 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Get Vector</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='get_vector.css')}}">
+    <title>Font Finder</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='get_vector.css')}}">
 </head>
 <body>
-    <div class="container">
-        <!-- <h1 class="text-center mb-4">Выбор</h1> -->
+
+<div class="main-wrapper">
+
+    <div class="card app-card shadow-lg">
+
+        <h1 class="title">🔍 Font Finder</h1>
+
         <form action="/upload" method="POST" enctype="multipart/form-data">
-        <div class="add_image">
-            <input type="file" class="image" name="photo" id="fileInput" required>
-        </div>
-        <!-- <button type="submit" class="btn" name="action" value="vector">Получить вектор</button> -->
-        <button type="submit" class="btn" name="action" value="search">Найти шрифт</button>
+            
+            <label for="fileInput" class="upload-box">
+                <div class="upload-content">
+                    <p>Перетащите изображение сюда</p>
+                    <span>или нажмите для выбора</span>
+                </div>
+                <input type="file" name="photo" id="fileInput" hidden required>
+            </label>
+
+            <button type="submit" class="btn btn-gradient">
+                Найти шрифт
+            </button>
         </form>
 
-        <div class="vector">
-            <p><strong>Файл: </strong>{{ filename }}</p>
-            <!-- <p><strong>Вектор:</strong>{{ vector }}</p> -->
-            <p><strong>Топ-10 похожих шрифтов:</strong></p>
-                <ul>
-                    {% for font in fonts %}
-                    <li>
-                        {{ font.name }} — cos: {{ "%.4f"|format(font.sim) }}
-                    </li>
-                    {% endfor %}
-                </ul>
+        {% if uploaded_image %}
+        <div class="uploaded-section">
+            <p class="file-name">📎 {{ filename }}</p>
+
+            <div class="uploaded-full">
+                <img src="data:image/png;base64,{{ uploaded_image }}">
+            </div>
         </div>
+        {% endif %}
+
+        {% if fonts %}
+        <div class="results-section">
+            <h3 class="results-title">Похожие шрифты</h3>
+
+            {% for font in fonts %}
+            <div class="font-result">
+
+                <div class="font-preview-full">
+                    <img src="data:image/png;base64,{{ font.image }}">
+                </div>
+
+                <div class="font-meta">
+                    <div class="font-left">
+                        <h4 class="font-name">{{ font.name }}</h4>
+                    </div>
+                    <div class="font-right">
+                        <span class="similarity">
+                            Similarity {{ "%.2f"|format(font.sim * 100) }}%
+                        </span>
+                    </div>
+                </div>
+
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
     </div>
-   
+</div>
+
 </body>
 </html>

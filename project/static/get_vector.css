@@ -1,68 +1,170 @@
-/* get_vector.css */
+/* ============================= */
+/*           GLOBAL              */
+/* ============================= */
+
 body {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    font-family: Arial, sans-serif;
-    padding: 20px;
+    margin: 0;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    font-family: 'Segoe UI', sans-serif;
     min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
 }
 
-.container {
+/* Центрируем контент */
+.main-wrapper {
+    width: 100%;
+    max-width: 1100px;
+    margin: 60px auto;
+    padding: 20px;
+}
+
+/* Основная карточка приложения */
+.app-card {
     background: white;
-    border-radius: 10px;
-    padding: 30px;
-    text-align: center;
-    max-width: 400px;
-    width: 100%;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    border-radius: 25px;
+    padding: 50px;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.15);
 }
 
-.add_image {
-    margin-bottom: 20px;
-}
+/* ============================= */
+/*           HEADER              */
+/* ============================= */
 
-.image {
-    width: 100%;
-    padding: 10px;
-    border: 2px dashed #667eea;
-    border-radius: 5px;
+.title {
+    font-weight: 700;
+    font-size: 32px;
     margin-bottom: 10px;
 }
 
-.btn {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    border: none;
-    padding: 12px 30px;
-    margin: 5px;
-    border-radius: 5px;
+
+/* ============================= */
+/*         UPLOAD BOX            */
+/* ============================= */
+
+.upload-box {
+    border: 2px dashed #667eea;
+    border-radius: 20px;
+    padding: 50px;
     cursor: pointer;
-    font-size: 16px;
-    width: 100%;
+    transition: 0.3s;
+    text-align: center;
+    margin-bottom: 25px;
 }
 
-.btn:hover {
+.upload-box:hover {
+    background: #f5f7ff;
+}
+
+.upload-content p {
+    font-weight: 600;
+    font-size: 20px;
+    margin: 0;
+}
+
+.upload-content span {
+    font-size: 15px;
+    color: #888;
+}
+
+/* Кнопка */
+.btn-gradient {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    border: none;
+    padding: 14px;
+    border-radius: 12px;
+    font-weight: 600;
+    width: 50%;
+    color: white;
+    font-size: 20px;
+    transition: 0.3s;
+}
+
+.btn-gradient:hover {
     opacity: 0.9;
 }
 
-.vector {
-    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-    border-radius: 10px;
-    padding: 20px;
+/* ============================= */
+/*       UPLOADED IMAGE          */
+/* ============================= */
+
+.uploaded-section {
+    margin-top: 50px;
+}
+
+.file-name {
+    font-weight: 600;
+    margin-bottom: 15px;
+    color: #444;
+}
+
+.uploaded-full img {
+    width: 100%;
+    max-height: 500px;
+    object-fit: contain;
+    border-radius: 25px;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+    background: white;
+    padding: 25px;
+}
+
+/* ============================= */
+/*          RESULTS              */
+/* ============================= */
+
+.results-section {
+    margin-top: 70px;
+}
+
+.results-title {
+    font-weight: 700;
+    font-size: 24px;
+    margin-bottom: 40px;
+}
+
+/* ============================= */
+/*     FULL WIDTH FONT CARD      */
+/* ============================= */
+
+.font-result {
+    margin-bottom: 60px;
+}
+
+.font-preview-full {
+    background: white;
+    border-radius: 30px;
+    padding: 60px 50px;
+    box-shadow: 0 25px 80px rgba(0,0,0,0.08);
+    transition: 0.3s ease;
+}
+
+.font-preview-full:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 35px 100px rgba(0,0,0,0.18);
+}
+
+.font-preview-full img {
+    width: 100%;
+    height: auto;
+}
+
+/* Информация о шрифте */
+.font-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     margin-top: 20px;
-    border-left: 4px solid #667eea;
-    text-align: left;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    padding: 0 10px;
 }
 
-.vector p {
-    margin: 0 0 10px 0;
+.font-name {
+    font-size: 24px;
+    font-weight: 700;
+    margin: 0;
+}
+
+.similarity {
     font-size: 14px;
-    color: #333;
-}
-
-.vector p:last-child {
-    margin-bottom: 0;
+    color: #555;
+    background: #eef1ff;
+    padding: 8px 14px;
+    border-radius: 25px;
 }
