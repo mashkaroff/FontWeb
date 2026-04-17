@@ -28,10 +28,17 @@
             <button type="submit" class="btn btn-gradient">
                 Найти шрифт
             </button>
+            <div id="previewContainer" class="uploaded-section" style="display:none;">
+                    <p class="file-name">📎 Выбранное изображение</p>
+
+                    <div class="uploaded-full">
+                        <img id="previewImage">
+                    </div>
+                </div>
         </form>
 
         {% if uploaded_image %}
-        <div class="uploaded-section">
+        <div class="uploaded-section" id="uploadedImageSection">
             <p class="file-name">📎 {{ filename }}</p>
 
             <div class="uploaded-full">
@@ -41,7 +48,7 @@
         {% endif %}
 
         {% if fonts %}
-        <div class="results-section">
+        <div class="results-section" id="resultsSection">
             <h3 class="results-title">Похожие шрифты</h3>
 
             {% for font in fonts %}
@@ -71,4 +78,39 @@
 </div>
 
 </body>
+<script>
+
+const fileInput = document.getElementById("fileInput");
+const previewImage = document.getElementById("previewImage");
+const previewContainer = document.getElementById("previewContainer");
+
+fileInput.addEventListener("change", function(){
+
+    const file = this.files[0];
+
+    if(file){
+
+        const results = document.getElementById("resultsSection");
+        if(results){
+            results.style.display = "none";
+        }
+
+        const uploaded = document.getElementById("uploadedImageSection");
+        if(uploaded){
+            uploaded.style.display = "none";
+        }
+
+        const reader = new FileReader();
+
+        reader.onload = function(e){
+            previewImage.src = e.target.result;
+            previewContainer.style.display = "block";
+        }
+
+        reader.readAsDataURL(file);
+    }
+
+});
+
+</script>
 </html>

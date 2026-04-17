@@ -43,13 +43,13 @@ class ModelClassifier(nn.Module):
 
 
 
-def load_model(model_path='project\contrastive_method\contrastive_model.pt'):
+def load_model(model_path='project/contrastive_method/contrastive_model.pt'):
     encoder = SimCLRModel()
     encoder.load_state_dict(torch.load(model_path, map_location=torch.device('cpu')))
     encoder.eval()
     return encoder
 
-def load_classifier(model_path='project\contrastive_method\classifier_model.pt'):
+def load_classifier(model_path='project/contrastive_method/classifier_model.pt'):
     classifier = ModelClassifier()
     classifier.load_state_dict(torch.load(model_path, map_location=torch.device('cpu')))
     classifier.eval()
