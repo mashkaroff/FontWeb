@@ -58,7 +58,7 @@ class Database:
             font_files.append((a, font_name))
         
         for font_path, fontname in font_files:
-            tensors = torch.zeros((number_of_images_per_font, 512), dtype=torch.float32)
+            tensors = torch.zeros((number_of_images_per_font, 16), dtype=torch.float32) # задать нужный размер
 
             for j in range(number_of_images_per_font):
                 img_height = random.randint(10, 33)
