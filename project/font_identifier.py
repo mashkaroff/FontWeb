@@ -7,12 +7,22 @@ from torchvision import models, transforms
 import torch.nn.functional as F
 from PIL import Image, ImageDraw
 import json
+from pathlib import Path
 
 def load_model():
+    MODEL_PATH = Path(__file__).parent / "font_identifier_model_rus_eng_1line_final_1.pth"
     
     model = models.resnet18(weights=models.ResNet18_Weights.DEFAULT)
+    # для модели с выходом 512
     model.fc = nn.Linear(model.fc.in_features, 71)
-    model.load_state_dict(torch.load('project/font_identifier_model_lines.pth'))
+
+    # для модели с выходом 16
+    # model.fc = nn.Sequential(
+    #     nn.Linear(model.fc.in_features, 16),
+    #     nn.Linear(16, 71)
+    # )
+
+    model.load_state_dict(torch.load(MODEL_PATH))
     model.fc = nn.Identity()
     model.eval()
 
@@ -44,7 +54,6 @@ def row_to_vec(model, row_image):
     data_transforms = transforms.Compose([
         transforms.Grayscale(num_output_channels=3),
         transforms.Resize(18),
-        transforms.CenterCrop((18, 112)),
         transforms.ToTensor(),
         transforms.Normalize(
             mean=[0.485, 0.456, 0.406],
@@ -52,13 +61,27 @@ def row_to_vec(model, row_image):
         )
     ])
 
-    image_tensor = data_transforms(row_image).unsqueeze(0)
+    width, height = row_image.size
 
-    with torch.no_grad():
-        vector = model(image_tensor).squeeze()
-        # print(vector)
+    vectors_row = []
 
-    return vector
+    for x in range(0, width, 112):
+
+        if x + 112 <= width:
+            crop = row_image.crop((x, 0, x + 112, height))
+        else:
+            crop = Image.new("L", (112, height), color=255)
+
+            tail = row_image.crop((x, 0, width, height))
+            crop.paste(tail, (0, 0))
+
+        image_tensor = data_transforms(crop).unsqueeze(0)
+
+        with torch.no_grad():
+            vectors_row.append(model(image_tensor).squeeze())
+
+    return torch.stack(vectors_row).mean(dim=0)
+
 
 def get_similar_fonts(image_bytes):
 
@@ -71,7 +94,7 @@ def get_similar_fonts(image_bytes):
         vectors.append(row_to_vec(model, row))
 
     mean_vector = torch.stack(vectors).mean(dim=0)
-    # print(mean_vector)
+    print(mean_vector)
 
     top = []
 
